@@ -7,7 +7,7 @@ This project includes scripts for processing videos and counting objects using t
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/dev02chandan/Yolo8-Object-Detection-and-Counting.git
 ```
 
 ### 2. Create a Virtual Environment
