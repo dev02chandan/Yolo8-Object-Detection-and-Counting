@@ -18,13 +18,27 @@ classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "trai
               "teddy bear", "hair drier", "toothbrush"
               ]
 
-def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_count=None, run_dir=""):
+def count_objects(list1):
+  count = {}
+  for obj in list1:
+    if obj not in count:
+      count[obj] = 0
+    count[obj] += 1
+  return count
+
+def count(set_obj):
+    final_obj_list =[]
+    Obj_list = list(set_obj)
+    for i in Obj_list:
+        temp = i.split('_')
+        final_obj_list.append(temp[0])
+    return count_objects(final_obj_list)
+
+def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_count=[i for i in range(1, 81)], run_dir=""):
     """
     Process the video to count objects, draw bounding boxes around detected objects,
     and save an annotated video along with a JSON file containing the counts.
     """
-    if classes_to_count is None:
-        classes_to_count = [0, 1, 2, 3]  # Default classes, if not specified
 
     # Load the YOLO model
     model = YOLO(model_path)
@@ -51,6 +65,7 @@ def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_coun
 
         # Process the frame
         results = model.track(frame, persist=True, tracker="bytetrack.yaml", conf=0.6, iou=0.6, stream=True)
+        annotated_frames = []
         
         for r in results:
             for box in r.boxes:
@@ -58,10 +73,10 @@ def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_coun
                     track_id = box.id.int().cpu().tolist()[0]
                     class_id = int(box.cls[0])
                     class_name = classNames[class_id]
-                    Final_obj.add(f"{class_name}_{track_id}")
-                    object_counts[class_name] += 1
+                    Final_obj.add(classNames[class_id]+'_'+str(track_id))
                     
             annotated_frame = r.plot()
+            annotated_frames.append(annotated_frame)
         
         # Write the frame with annotations to the output video
         out.write(annotated_frame)
@@ -76,6 +91,6 @@ def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_coun
     # Save object counts to a JSON file
     json_path = os.path.join(run_dir, "object_counts.json")
     with open(json_path, 'w') as f:
-        json.dump(object_counts, f, indent=4)
+        json.dump(count(Final_obj), f, indent=4)
 
-    return object_counts, output_video_path
+    return count(Final_obj), output_video_path
