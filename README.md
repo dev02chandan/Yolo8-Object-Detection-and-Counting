@@ -15,7 +15,7 @@ git clone https://github.com/dev02chandan/Yolo8-Object-Detection-and-Counting.gi
 #### Windows
 
 ```bash
-cd <repository-name>
+cd Yolo8-Object-Detection-and-Counting
 python -m venv venv
 .\venv\Scripts\activate
 ```
@@ -23,7 +23,7 @@ python -m venv venv
 #### Mac/Linux
 
 ```bash
-cd <repository-name>
+cd Yolo8-Object-Detection-and-Counting
 python3 -m venv venv
 source venv/bin/activate
 ```
@@ -39,8 +39,12 @@ pip install -r requirements.txt
 To count objects in a video, run the following command:
 
 ```bash
-python src/main.py --video_path "Videos/video1.mp4" --model_path "yolov8m.pt" --classes_to_count 0 1 2 3
+python src/main.py --video_path "videos/video1.mp4" --model_path "yolov8m.pt" --classes_to_count 39 67 63 56 2 66
 ```
 
 This will process the video by reducing its frame rate, detecting, and counting objects, and then outputting the results in a new directory within **runs/** containing the count in a JSON file and the processed video.
 
+
+## Acknowledgement
+
+This code is contributed mainly by Prof. Kapil Rathor
