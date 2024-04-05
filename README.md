@@ -6,7 +6,7 @@ This project includes scripts for processing videos and counting objects using t
 
 See the output of our object detection and counting process in action below:
 
-<video src='https://youtube.com/shorts/O3ocFxGyJG4?feature=share' width=180/>
+<video src='runs/20240405_155550/output_video.mp4'/>
 
 ## Installation
 
