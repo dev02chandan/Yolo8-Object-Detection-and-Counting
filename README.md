@@ -6,9 +6,9 @@ This project includes scripts for processing videos and counting objects using t
 
 See the output of our object detection and counting process in action below:
 
-[![Object Detection and Counting](other/thumbnail.jpg)]("https://youtube.com/shorts/O3ocFxGyJG4?feature=share")
+[![](other/thumbnail.jpg)]("https://youtube.com/shorts/O3ocFxGyJG4?feature=share")
 
-
+[![Object Detection and Counting](other/thumbnail.png)](https://youtube.com/shorts/O3ocFxGyJG4?feature=share "Object Detection and Counting")
 
 ## Installation
 
