@@ -6,7 +6,10 @@ This project includes scripts for processing videos and counting objects using t
 
 See the output of our object detection and counting process in action below:
 
-<video src='runs/20240405_155550/output_video.mp4'/>
+
+https://github.com/dev02chandan/Yolo8-Object-Detection-and-Counting/assets/73015720/79805bc7-59d0-4eec-b913-f180e19437e8
+
+
 
 ## Installation
 
