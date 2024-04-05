@@ -2,6 +2,13 @@
 
 This project includes scripts for processing videos and counting objects using the YOLO8v models.
 
+## Project Output Video
+
+See the output of our object detection and counting process in action below:
+
+[![Object Detection and Counting Output]]("https://youtube.com/shorts/O3ocFxGyJG4?feature=share")
+
+
 ## Installation
 
 ### 1. Clone the Repository
