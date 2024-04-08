@@ -63,6 +63,10 @@ python src/main.py --video_path "videos/video1.mp4" --model_path "yolov8m.pt" --
 
 This will process the video by reducing its frame rate, detecting, and counting objects, and then outputting the results in a new directory within **runs/** containing the count in a JSON file and the processed video.
 
+OR 
+
+Directly use the code in colab:
+https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sharing
 
 ## Acknowledgement
 
