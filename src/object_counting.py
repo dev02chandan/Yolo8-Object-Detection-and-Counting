@@ -64,7 +64,7 @@ def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_coun
             break
 
         # Process the frame
-        results = model.track(frame, persist=True, tracker="bytetrack.yaml", conf=0.6, iou=0.6, stream=True)
+        results = model.track(frame, classes= classes_to_count,persist=True, tracker="bytetrack.yaml", conf=0.6, iou=0.6, stream=True)
         annotated_frames = []
         
         for r in results:
