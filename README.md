@@ -66,6 +66,7 @@ This will process the video by reducing its frame rate, detecting, and counting 
 OR 
 
 Directly use the code in colab:
+
 https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sharing
 
 ## Acknowledgement
