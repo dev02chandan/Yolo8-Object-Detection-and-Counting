@@ -1,0 +1,18 @@
+{
+    "sink": 6,
+    "chair": 10,
+    "diningtable": 2,
+    "pottedplant": 5,
+    "toilet": 5,
+    "bottle": 20,
+    "sofa": 3,
+    "remote": 2,
+    "cup": 3,
+    "vase": 1,
+    "backpack": 1,
+    "laptop": 1,
+    "toaster": 1,
+    "bed": 1,
+    "oven": 1,
+    "refrigerator": 1
+}
