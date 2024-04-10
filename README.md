@@ -69,6 +69,12 @@ OR
 
 https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sharing
 
+## Observations on testing
+
+1. Duplicate items were counted, due to reflections, or circular / shaky movement of camera.
+2. Giving the exact classes that you want to count improves the results. 
+3. Low confidence duplicate items are frequently detected.
+
 ## Acknowledgement
 
 This code is contributed mainly by Prof. Kapil Rathor
