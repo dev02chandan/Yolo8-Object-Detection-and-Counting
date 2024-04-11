@@ -41,20 +41,17 @@ if uploaded_video is not None and len(selected_classes) > 0:
     with st.spinner('Processing...'):
 
         # Save uploaded video to a temporary file
-        tfile = tempfile.NamedTemporaryFile(delete=False) 
-        tfile.write(uploaded_video.read())
+        tfile = tempfile.NamedTemporaryFile(delete=False, suffix='.mp4')  # Ensure suffix matches file type
+        tfile.write(uploaded_video.getvalue())  # Use getvalue() to read the content of the uploaded file
         video_path = tfile.name
 
         # Process video
         run_dir = "runs/temp"
         os.makedirs(run_dir, exist_ok=True)
         object_counts, output_video_path = process_video_and_count(video_path, 'yolov8m.pt', class_ids, run_dir)
-        
-        video_file = open(output_video_path, 'rb')
-        video_bytes = video_file.read()
 
-        # Display results
-        st.video(video_bytes, format="video/mp4")
+        st.video(output_video_path)
 
+        # Display object counts
         st.write(f"Object counts: {object_counts}")
 
