@@ -1,4 +1,4 @@
-# Video Processing and Object Counting
+# Video Processing and Object Counting with Streamlit frontend
 
 This project includes scripts for processing videos and counting objects using the YOLO8v models. 
 
@@ -55,7 +55,16 @@ pip install -r requirements.txt
 
 ## Usage
 
-To count objects in a video, run the following command:
+**Use the Frontend:**
+
+```bash
+streamlit run src/app.py
+```
+and go to the localhost link provided in the terminal.
+
+OR 
+
+**Run directly in terminal:** 
 
 ```bash
 python src/main.py --video_path "videos/video1.mp4" --model_path "yolov8m.pt" --classes_to_count 39 67 63 56 2 66
