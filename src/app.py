@@ -5,7 +5,8 @@ import tempfile
 import os
 
 # App title
-st.title('Object Detection and Counting with YOLOv8')
+st.image("videos/logo.png", use_column_width=False)
+st.title('Object Detection and Counting')
 
 
 
