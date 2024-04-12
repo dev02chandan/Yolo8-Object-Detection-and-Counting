@@ -2,7 +2,7 @@
 
 This project includes scripts for processing videos and counting objects using the YOLO8v models. 
 
-Here is a preview of how it works:
+## Preview
 
 
 https://github.com/dev02chandan/Yolo8-Object-Detection-and-Counting/assets/73015720/7b04da0f-255a-4de9-9885-8c74d52f1e50
@@ -19,6 +19,9 @@ https://github.com/dev02chandan/Yolo8-Object-Detection-and-Counting/assets/73015
 }
 ```
 
+**Frontend:**
+
+![app _ Streamlit - http___localhost_8501_](https://github.com/dev02chandan/Yolo8-Object-Detection-and-Counting/assets/73015720/71556e94-ef70-41dd-a95d-f61e123f47bc)
 
 
 ## Installation
