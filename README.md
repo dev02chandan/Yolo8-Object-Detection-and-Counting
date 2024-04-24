@@ -81,6 +81,14 @@ OR
 
 https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sharing
 
+## Training on other objects using Roboflow
+
+
+Follow the Roboflow notebook below, and train Yolov8 model on custom objects. 
+Steps to create the dataset and labelling are also in the notebook below: 
+
+https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/train-yolov8-object-detection-on-custom-dataset.ipynb#scrollTo=ovQgOj_xSNDg
+
 ## Observations on testing
 
 1. Duplicate items were counted, due to reflections, or circular / shaky movement of camera.
