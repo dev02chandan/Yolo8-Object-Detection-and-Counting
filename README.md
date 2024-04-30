@@ -79,7 +79,7 @@ OR
 
 **Directly use the code in colab:**
 
-https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sharing
+[Link to Notebook](https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sharing)
 
 ## Training on other objects using Roboflow
 
@@ -87,14 +87,16 @@ https://colab.research.google.com/drive/18a8Y3gtt-byXX5jfdjhJ3w6GmhgxGoss?usp=sh
 Follow the Roboflow notebook below, and train Yolov8 model on custom objects. 
 Steps to create the dataset and labelling are also in the notebook below: 
 
-https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/train-yolov8-object-detection-on-custom-dataset.ipynb#scrollTo=ovQgOj_xSNDg
+[Link to Notebook](https://colab.research.google.com/github/roboflow-ai/notebooks/blob/main/notebooks/train-yolov8-object-detection-on-custom-dataset.ipynb#scrollTo=ovQgOj_xSNDg)
+
+> **_NOTE:_**  When you train on new objects, the Yolo model will forget the old objects. Your dataset should include all the objects that you want to train the model for. This is called ***Catastrophic Forgetting***. Overcoming this is called ***Continual Learning*** and this area is still a field of research.
 
 ## Observations on testing
 
-1. Duplicate items were counted, due to reflections, or circular / shaky movement of camera.
+1. Duplicate items were counted, due to reflections, or circular / shaky movement of camera. Avoiding such things while taking videos can improve results.
 2. Giving the exact classes that you want to count improves the results. 
-3. Low confidence duplicate items are frequently detected.
+3. Low confidence duplicate items are frequently detected. You can increase or decrease the confidence as per your requirements (line 66 in object_counting.py)
 
 ## Acknowledgement
 
-This code is contributed mainly by Prof. Kapil Rathor
+Special Thanks to Prof. Kapil Rathore Sir.
