@@ -5,17 +5,7 @@ from collections import defaultdict
 from ultralytics import YOLO
 
 # Global classNames for use across scripts
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-              "teddy bear", "hair drier", "toothbrush"
-              ]
+classNames = ["cup", "cutter", "fork", "knife", "painting", "pan", "plant", "plate", 'scissor', 'spoon']
 
 def count_objects(list1):
   count = {}
@@ -33,7 +23,7 @@ def count(set_obj):
         final_obj_list.append(temp[0])
     return count_objects(final_obj_list)
 
-def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_count=[i for i in range(1, 81)], run_dir=""):
+def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_count=[i for i in range(1, 11)], run_dir=""):
     """
     Process the video to count objects, draw bounding boxes around detected objects,
     and save an annotated video along with a JSON file containing the counts.
@@ -63,7 +53,7 @@ def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_coun
             break
 
         # Process the frame
-        results = model.track(frame, classes= classes_to_count,persist=True, tracker="bytetrack.yaml", conf=0.8, iou=0.6, stream=True)
+        results = model.track(frame, classes= classes_to_count,persist=True, tracker="bytetrack.yaml", conf=0.2, iou=0.6, stream=True)
         annotated_frames = []
         
         for r in results:
@@ -93,3 +83,50 @@ def process_video_and_count(video_path, model_path='yolov8m.pt', classes_to_coun
         json.dump(count(Final_obj), f, indent=4)
 
     return count(Final_obj), output_video_path
+
+
+def process_image_and_count(image_path, model_path='yolov8m.pt', classes_to_count=[i for i in range(1, 11)], run_dir=""):
+    """
+    Process the image to count objects, draw bounding boxes around detected objects,
+    and save an annotated image along with a JSON file containing the counts.
+    """
+
+    # Load the YOLO model
+    model = YOLO(model_path)
+
+    # Load the image file
+    image = cv2.imread(image_path)
+    if image is None:
+        raise FileNotFoundError(f"No image found at {image_path}")
+
+    # Process the image
+    results = model.track(image, classes=classes_to_count, persist=True, conf=0.2, iou=0.6, stream=False)
+    
+    object_counts = defaultdict(int)
+    Final_obj = set()
+
+    annotated_images = []
+
+    for r in results:
+        for box in r.boxes:
+            if box.id is not None and box.cls[0] in classes_to_count:
+                track_id = box.id.int().cpu().tolist()[0]
+                class_id = int(box.cls[0])
+                class_name = classNames[class_id]
+                Final_obj.add(class_name + '_' + str(track_id))
+                
+        annotated_image = r.plot()
+        annotated_images.append(annotated_image)
+
+    # Determine output image path
+    output_image_path = os.path.join(run_dir, "output_image.jpg")
+    if annotated_images:
+        # Save the annotated image
+        cv2.imwrite(output_image_path, annotated_images[0])
+
+    # Save object counts to a JSON file
+    json_path = os.path.join(run_dir, "object_counts.json")
+    with open(json_path, 'w') as f:
+        json.dump(count(Final_obj), f, indent=4)
+
+    return count(Final_obj), output_image_path
