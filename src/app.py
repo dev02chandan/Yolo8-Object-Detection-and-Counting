@@ -14,17 +14,19 @@ st.title('Object Detection and Counting')
 uploaded_video = st.file_uploader("Upload a mp4 video...", type=["mp4"])
 
 # Global classNames for use across scripts
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-              "teddy bear", "hair drier", "toothbrush"
-              ]
+# classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+#               "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+#               "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+#               "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+#               "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+#               "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
+#               "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
+#               "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+#               "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
+#               "teddy bear", "hair drier", "toothbrush"
+#               ]
+
+classNames = ["cup", "cutter", "fork", "knife", "painting", "pan", "plant", "plate", 'scissor', 'spoon']
 
 # Selection of objects to detect
 selected_classes = st.multiselect(
@@ -32,7 +34,7 @@ selected_classes = st.multiselect(
 
     options=classNames,
 
-    default=["chair", "laptop"]
+    default=["cup", "cutter"]
 )
 
 # Convert class names to class IDs
@@ -49,7 +51,7 @@ if uploaded_video is not None and len(selected_classes) > 0:
         # Process video
         run_dir = "runs/temp"
         os.makedirs(run_dir, exist_ok=True)
-        object_counts, output_video_path = process_video_and_count(video_path, 'yolov8m.pt', class_ids, run_dir)
+        object_counts, output_video_path = process_video_and_count(video_path, '11classes_trained.pt', class_ids, run_dir)
 
         st.video(output_video_path)
 
