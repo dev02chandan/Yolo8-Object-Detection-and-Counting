@@ -8,7 +8,7 @@ def main():
     parser = argparse.ArgumentParser(description="Count objects in a video.")
     parser.add_argument('--video_path', type=str, required=True, help="Path to the video file.")
     parser.add_argument('--model_path', type=str, default='yolov8m.pt', help="Path to the YOLO model file.")
-    parser.add_argument('--classes_to_count', nargs='+', type=int, help="List of class IDs to count.", default=[i for i in range(1, 81)])
+    parser.add_argument('--classes_to_count', nargs='+', type=int, help="List of class IDs to count.", default=[i for i in range(1, 12)])
 
     args = parser.parse_args()
 
