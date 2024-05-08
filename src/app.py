@@ -25,7 +25,7 @@ classNames = ["cup", "cutter", "fork", "knife", "painting", "pan", "plant", "pla
 selected_classes = st.multiselect(
     'Select object classes to count',
     options=classNames,
-    default=["cup", "cutter"]
+    default= ["cup", "cutter", "fork", "knife", "painting", "pan", "plant", "plate", 'scissor', 'spoon']
 )
 
 # Convert class names to class IDs
