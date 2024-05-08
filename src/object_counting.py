@@ -5,7 +5,17 @@ from collections import defaultdict
 from ultralytics import YOLO
 
 # Global classNames for use across scripts
-classNames = ["cup", "cutter", "fork", "knife", "painting", "pan", "plant", "plate", 'scissor', 'spoon']
+classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
+              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
+              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
+              "teddy bear", "hair drier", "toothbrush"
+              ]
 
 def count_objects(list1):
   count = {}
@@ -85,7 +95,7 @@ def process_video_and_count(video_path, model_path='11classes_trained.pt', class
     return count(Final_obj), output_video_path
 
 
-def process_image_and_count(image_path, model_path='11classes_trained.pt', classes_to_count=[i for i in range(1, 11)], run_dir=""):
+def process_image_and_count(image_path, model_path='best_ver4.pt', classes_to_count=[i for i in range(1, 11)], run_dir=""):
     """
     Process the image to count objects, draw bounding boxes around detected objects,
     and save an annotated image along with a JSON file containing the counts.

@@ -19,7 +19,17 @@ elif input_type == "Image":
     uploaded_file = st.file_uploader("Upload an image...", type=["jpg", "png"])
     file_type = "image"
 
-classNames = ["cup", "cutter", "fork", "knife", "painting", "pan", "plant", "plate", 'scissor', 'spoon']
+classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
+              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
+              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
+              "teddy bear", "hair drier", "toothbrush"
+              ]
 
 # Selection of objects to detect
 selected_classes = st.multiselect(
@@ -43,10 +53,10 @@ if uploaded_file is not None and len(selected_classes) > 0:
         os.makedirs(run_dir, exist_ok=True)
 
         if file_type == "video":
-            object_counts, output_path = process_video_and_count(file_path, '11classes_trained.pt', class_ids, run_dir)
+            object_counts, output_path = process_video_and_count(file_path, 'best_ver4.pt', class_ids, run_dir)
             st.video(output_path)
         elif file_type == "image":
-            object_counts, output_path = process_image_and_count(file_path, '11classes_trained.pt', class_ids, run_dir)
+            object_counts, output_path = process_image_and_count(file_path, 'best_ver4.pt', class_ids, run_dir)
             st.image(output_path)
 
         # Display object counts
