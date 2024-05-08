@@ -5,17 +5,7 @@ from collections import defaultdict
 from ultralytics import YOLO
 
 # Global classNames for use across scripts
-classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
-              "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
-              "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
-              "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
-              "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
-              "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
-              "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
-              "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
-              "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
-              "teddy bear", "hair drier", "toothbrush"
-              ]
+classNames = ['airplane', 'apple', 'backpack', 'banana', 'baseball bat', 'baseball glove', 'bear', 'bed', 'bench', 'bicycle', 'bird', 'boat', 'book', 'bottle', 'bowl', 'broccoli', 'bus', 'cake', 'car', 'carrot', 'cat', 'cell phone', 'chair', 'clock', 'couch', 'cow', 'cup', 'cutter', 'dining table', 'dog', 'donut', 'elephant', 'fire hydrant', 'fork', 'frisbee', 'giraffe', 'hair drier', 'handbag', 'horse', 'hot dog', 'keyboard', 'kite', 'knife', 'laptop', 'microwave', 'motorcycle', 'mouse', 'orange', 'oven', 'painting', 'pan', 'parking meter', 'person', 'pizza', 'plate', 'potted plant', 'pottedplant', 'refrigerator', 'remote', 'sandwich', 'scissors', 'sheep', 'sink', 'skateboard', 'skis', 'snowboard', 'spoon', 'sports ball', 'stop sign', 'suitcase', 'surfboard', 'teddy bear', 'tennis racket', 'tie', 'toaster', 'toilet', 'toothbrush', 'traffic light', 'train', 'truck', 'tv', 'umbrella', 'vase', 'wine glass', 'zebra']
 
 def count_objects(list1):
   count = {}
@@ -33,7 +23,7 @@ def count(set_obj):
         final_obj_list.append(temp[0])
     return count_objects(final_obj_list)
 
-def process_video_and_count(video_path, model_path='11classes_trained.pt', classes_to_count=[i for i in range(1, 11)], run_dir=""):
+def process_video_and_count(video_path, model_path, classes_to_count, run_dir):
     """
     Process the video to count objects, draw bounding boxes around detected objects,
     and save an annotated video along with a JSON file containing the counts.
@@ -95,7 +85,7 @@ def process_video_and_count(video_path, model_path='11classes_trained.pt', class
     return count(Final_obj), output_video_path
 
 
-def process_image_and_count(image_path, model_path='best_ver4.pt', classes_to_count=[i for i in range(1, 11)], run_dir=""):
+def process_image_and_count(image_path, model_path, classes_to_count, run_dir):
     """
     Process the image to count objects, draw bounding boxes around detected objects,
     and save an annotated image along with a JSON file containing the counts.
