@@ -1,3 +1,9 @@
 {
-    "fork": 2
+    "pan": 1,
+    "fork": 3,
+    "plate": 3,
+    "knife": 4,
+    "spoon": 10,
+    "scissor": 1,
+    "cup": 2
 }

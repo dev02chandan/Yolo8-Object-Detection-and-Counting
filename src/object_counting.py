@@ -4,8 +4,7 @@ import os
 from collections import defaultdict
 from ultralytics import YOLO
 
-# Global classNames for use across scripts
-classNames = ['airplane', 'apple', 'backpack', 'banana', 'baseball bat', 'baseball glove', 'bear', 'bed', 'bench', 'bicycle', 'bird', 'boat', 'book', 'bottle', 'bowl', 'broccoli', 'bus', 'cake', 'car', 'carrot', 'cat', 'cell phone', 'chair', 'clock', 'couch', 'cow', 'cup', 'cutter', 'dining table', 'dog', 'donut', 'elephant', 'fire hydrant', 'fork', 'frisbee', 'giraffe', 'hair drier', 'handbag', 'horse', 'hot dog', 'keyboard', 'kite', 'knife', 'laptop', 'microwave', 'motorcycle', 'mouse', 'orange', 'oven', 'painting', 'pan', 'parking meter', 'person', 'pizza', 'plate', 'potted plant', 'pottedplant', 'refrigerator', 'remote', 'sandwich', 'scissors', 'sheep', 'sink', 'skateboard', 'skis', 'snowboard', 'spoon', 'sports ball', 'stop sign', 'suitcase', 'surfboard', 'teddy bear', 'tennis racket', 'tie', 'toaster', 'toilet', 'toothbrush', 'traffic light', 'train', 'truck', 'tv', 'umbrella', 'vase', 'wine glass', 'zebra']
+classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
 
 def count_objects(list1):
   count = {}
@@ -53,7 +52,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, run_dir):
             break
 
         # Process the frame
-        results = model.track(frame, classes= classes_to_count,persist=True, tracker="bytetrack.yaml", conf=0.2, iou=0.6, stream=True)
+        results = model.track(frame, classes= classes_to_count,persist=True, tracker="bytetrack.yaml", conf=0.6, iou=0.6, stream=True)
         annotated_frames = []
         
         for r in results:

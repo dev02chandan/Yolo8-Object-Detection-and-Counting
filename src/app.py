@@ -19,13 +19,13 @@ elif input_type == "Image":
     uploaded_file = st.file_uploader("Upload an image...", type=["jpg", "png"])
     file_type = "image"
 
-classNames = ['airplane', 'apple', 'backpack', 'banana', 'baseball bat', 'baseball glove', 'bear', 'bed', 'bench', 'bicycle', 'bird', 'boat', 'book', 'bottle', 'bowl', 'broccoli', 'bus', 'cake', 'car', 'carrot', 'cat', 'cell phone', 'chair', 'clock', 'couch', 'cow', 'cup', 'cutter', 'dining table', 'dog', 'donut', 'elephant', 'fire hydrant', 'fork', 'frisbee', 'giraffe', 'hair drier', 'handbag', 'horse', 'hot dog', 'keyboard', 'kite', 'knife', 'laptop', 'microwave', 'motorcycle', 'mouse', 'orange', 'oven', 'painting', 'pan', 'parking meter', 'person', 'pizza', 'plate', 'potted plant', 'pottedplant', 'refrigerator', 'remote', 'sandwich', 'scissors', 'sheep', 'sink', 'skateboard', 'skis', 'snowboard', 'spoon', 'sports ball', 'stop sign', 'suitcase', 'surfboard', 'teddy bear', 'tennis racket', 'tie', 'toaster', 'toilet', 'toothbrush', 'traffic light', 'train', 'truck', 'tv', 'umbrella', 'vase', 'wine glass', 'zebra']
+classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
 
 # Selection of objects to detect
 selected_classes = st.multiselect(
     'Select object classes to count',
     options=classNames,
-    default= ["cup", "cutter", "fork", "knife", "painting", "pan", "pottedplant", "plate", 'scissors', 'spoon']
+    default = ['cup', 'cutter']
 )
 
 # Convert class names to class IDs
@@ -43,10 +43,10 @@ if uploaded_file is not None and len(selected_classes) > 0:
         os.makedirs(run_dir, exist_ok=True)
 
         if file_type == "video":
-            object_counts, output_path = process_video_and_count(file_path, 'best_ver4.pt', class_ids, run_dir)
+            object_counts, output_path = process_video_and_count(file_path, 'best_ver5.pt', class_ids, run_dir)
             st.video(output_path)
         elif file_type == "image":
-            object_counts, output_path = process_image_and_count(file_path, 'best_ver4.pt', class_ids, run_dir)
+            object_counts, output_path = process_image_and_count(file_path, 'best_ver5.pt', class_ids, run_dir)
             st.image(output_path)
 
         # Display object counts
