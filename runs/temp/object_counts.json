@@ -1,9 +1,8 @@
 {
-    "pan": 1,
-    "fork": 3,
-    "plate": 3,
-    "knife": 4,
-    "spoon": 10,
+    "spoon": 15,
+    "fork": 5,
     "scissor": 1,
-    "cup": 2
+    "plate": 3,
+    "cup": 1,
+    "knife": 4
 }

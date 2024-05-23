@@ -6,6 +6,18 @@ from ultralytics import YOLO
 
 classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
 
+# classNames = ["person", "bicycle", "car", "motorbike", "aeroplane", "bus", "train", "truck", "boat",
+#               "traffic light", "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat",
+#               "dog", "horse", "sheep", "cow", "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella",
+#               "handbag", "tie", "suitcase", "frisbee", "skis", "snowboard", "sports ball", "kite", "baseball bat",
+#               "baseball glove", "skateboard", "surfboard", "tennis racket", "bottle", "wine glass", "cup",
+#               "fork", "knife", "spoon", "bowl", "banana", "apple", "sandwich", "orange", "broccoli",
+#               "carrot", "hot dog", "pizza", "donut", "cake", "chair", "sofa", "pottedplant", "bed",
+#               "diningtable", "toilet", "tvmonitor", "laptop", "mouse", "remote", "keyboard", "cell phone",
+#               "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors",
+#               "teddy bear", "hair drier", "toothbrush"
+#               ]
+
 def count_objects(list1):
   count = {}
   for obj in list1:
@@ -52,7 +64,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, run_dir):
             break
 
         # Process the frame
-        results = model.track(frame, classes= classes_to_count,persist=True, tracker="bytetrack.yaml", conf=0.6, iou=0.6, stream=True)
+        results = model.track(frame, classes= classes_to_count,persist=True, tracker="botsort.yaml", conf=0.6, iou=0.6, stream=True)
         annotated_frames = []
         
         for r in results:

@@ -25,7 +25,7 @@ classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'pla
 selected_classes = st.multiselect(
     'Select object classes to count',
     options=classNames,
-    default = ['cup', 'cutter']
+    default = ['cup', 'fork', 'spoon', 'knife']
 )
 
 # Convert class names to class IDs
@@ -43,10 +43,10 @@ if uploaded_file is not None and len(selected_classes) > 0:
         os.makedirs(run_dir, exist_ok=True)
 
         if file_type == "video":
-            object_counts, output_path = process_video_and_count(file_path, 'best_ver5.pt', class_ids, run_dir)
+            object_counts, output_path = process_video_and_count(file_path, '50 epochs balanced.pt', class_ids, run_dir)
             st.video(output_path)
         elif file_type == "image":
-            object_counts, output_path = process_image_and_count(file_path, 'best_ver5.pt', class_ids, run_dir)
+            object_counts, output_path = process_image_and_count(file_path, '50 epochs balanced.pt', class_ids, run_dir)
             st.image(output_path)
 
         # Display object counts
