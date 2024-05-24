@@ -3,6 +3,7 @@ from shutil import copyfile
 from object_counting import process_video_and_count, process_image_and_count
 import tempfile
 import os
+import time
 
 # App title
 st.image("videos/logo.png", use_column_width=False)
@@ -39,7 +40,8 @@ if uploaded_file is not None and len(selected_classes) > 0:
         file_path = tfile.name
 
         # Process file based on type
-        run_dir = "runs/temp"
+        timestamp = time.strftime("%Y%m%d-%H%M%S")
+        run_dir = f"runs/{timestamp}"
         os.makedirs(run_dir, exist_ok=True)
 
         if file_type == "video":
