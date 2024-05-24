@@ -70,6 +70,7 @@ OR
 **Directly use the code in colab with ngrok and streamlit:**
 
 [Link to Notebook](https://colab.research.google.com/drive/12rv6tvAls7hzXeWPkVWCj9GrnIAr8P6_?usp=sharing)
+(Requires an Ngrok token)
 
 ## Training on other objects using Roboflow
 
