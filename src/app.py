@@ -33,7 +33,7 @@ selected_classes = st.multiselect(
 class_ids = [classNames.index(cls) for cls in selected_classes if cls in classNames]
 
 # Model selection
-model_options = ["50 epochs balanced.pt", "another_model.pt"]
+model_options = ["50 epochs balanced.pt", "Transfer learning 50 epochs balanced.pt"]
 selected_models = st.multiselect(
     'Select models to test',
     options=model_options,
