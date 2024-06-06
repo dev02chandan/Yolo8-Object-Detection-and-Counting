@@ -84,6 +84,9 @@ Steps to create the dataset and labelling are also in the notebook below:
 You can also try transfer learning on the Yolo Model by checking the following notebook:
 [Link to Kaggle Notebook](https://www.kaggle.com/dev02chandan/transfer-learning-by-freezing-layers-yolov8)
 
+Also you can try hyperparameter tuning for improving results of your prediction with this notebook: 
+[Link to Kaggle Notebook](https://www.kaggle.com/code/dev02chandan/hyperparam-tuning-for-yolov8/notebook)
+
 ## Object Counting Project Guidelines
 
 To achieve the best results when using the object counting project, please follow these guidelines:
