@@ -4,6 +4,7 @@ from object_counting import process_video_and_count, process_image_and_count
 import tempfile
 import os
 import time
+import torch
 
 # App title
 st.image("videos/logo.png", use_column_width=False)
@@ -39,6 +40,19 @@ selected_model = st.selectbox(
     options=model_options
 )
 
+# Check if CUDA is available
+cuda_available = torch.cuda.is_available()
+device = 'cuda:0' if cuda_available else 'cpu'
+half = cuda_available
+
+# Toggle for additional parameters
+with st.expander("Advanced Settings"):
+    iou = st.slider("IoU Threshold", 0.0, 1.0, 0.6)
+    conf = st.slider("Confidence Threshold", 0.0, 1.0, 0.6)
+    imgsz = st.slider("Image Size", 320, 1280, 640)
+    vid_stride = st.slider("Video Stride", 1, 10, 1)
+    augment = st.checkbox("Enable Augmentation", False)
+
 if uploaded_file is not None and len(selected_classes) > 0 and selected_model:
     with st.spinner('Processing...'):
         # Save uploaded file to a temporary file
@@ -52,10 +66,10 @@ if uploaded_file is not None and len(selected_classes) > 0 and selected_model:
         os.makedirs(run_dir, exist_ok=True)
 
         if file_type == "video":
-            object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, run_dir)
+            object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, iou, conf, imgsz, run_dir, tracker="botsort.yaml", vid_stride=vid_stride, device=device)
             st.video(output_path)
         elif file_type == "image":
-            object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, run_dir)
+            object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, run_dir, iou=iou, conf=conf, imgsz=imgsz, augment=augment, device=device)
             st.image(output_path)
 
         # Display object counts
