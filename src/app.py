@@ -27,18 +27,13 @@ classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'pla
 selected_classes = st.multiselect(
     'Select object classes to count',
     options=classNames,
-    default=['cup', 'fork', 'spoon', 'knife']
+    default=['cup', 'cutter', 'fork', 'knife', 'plate', 'scissor', 'spoon']
 )
 
 # Convert class names to class IDs
 class_ids = [classNames.index(cls) for cls in selected_classes if cls in classNames]
 
-# Model selection
-model_options = ["50_epochs_balanced.pt", "Transfer_learning_50_epochs_balanced.pt"]
-selected_model = st.selectbox(
-    'Select model to test',
-    options=model_options
-)
+selected_model = '50_epochs_balanced.pt'
 
 # Check if CUDA is available
 cuda_available = torch.cuda.is_available()
@@ -46,12 +41,18 @@ device = 'cuda:0' if cuda_available else 'cpu'
 half = cuda_available
 
 # Toggle for additional parameters
-with st.expander("Advanced Settings"):
-    iou = st.slider("IoU Threshold", 0.0, 1.0, 0.6)
-    conf = st.slider("Confidence Threshold", 0.0, 1.0, 0.6)
-    imgsz = st.slider("Image Size", 320, 1280, 640)
-    vid_stride = st.slider("Video Stride", 1, 10, 1)
-    augment = st.checkbox("Enable Augmentation", False)
+# with st.expander("Advanced Settings"):
+#     iou = st.slider("IoU Threshold", 0.0, 1.0, 0.6)
+#     conf = st.slider("Confidence Threshold", 0.0, 1.0, 0.6)
+#     imgsz = st.slider("Image Size", 320, 1280, 640)
+#     vid_stride = st.slider("Video Stride", 1, 10, 1)
+#     augment = st.checkbox("Enable Augmentation", False)
+
+iou = 0.6
+conf = 0.6
+imgsz = 1280
+vid_stride = 2
+augment = True
 
 if uploaded_file is not None and len(selected_classes) > 0 and selected_model:
     with st.spinner('Processing...'):

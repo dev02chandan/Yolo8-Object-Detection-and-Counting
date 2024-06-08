@@ -35,7 +35,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         raise FileNotFoundError(f"Cannot open video file {video_path}")
 
     output_video_path = os.path.join(run_dir, "output_video.mp4")
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')  # Changed codec to 'mp4v' for better compatibility
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     out = cv2.VideoWriter(output_video_path, fourcc, 30.0, (frame_width, frame_height))
@@ -96,7 +96,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     # Save object counts to a JSON file
     json_path = os.path.join(run_dir, "object_counts.json")
     with open(json_path, 'w') as f:
-        json.dump(list(Final_obj), f, indent=4)
+        json.dump(count(Final_obj), f, indent=4)
 
     return count(Final_obj), output_video_path
 
@@ -154,6 +154,6 @@ def process_image_and_count(image_path, model_path, classes_to_count, run_dir, i
     # Save object counts to a JSON file
     json_path = os.path.join(run_dir, "object_counts.json")
     with open(json_path, 'w') as f:
-        json.dump(list(Final_obj), f, indent=4)
+        json.dump(list(count(Final_obj)), f, indent=4)
 
     return count(Final_obj), output_image_path
