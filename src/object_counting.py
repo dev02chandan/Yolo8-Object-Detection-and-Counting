@@ -63,12 +63,12 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         raise FileNotFoundError(f"Cannot open video file {video_path}")
     logging.debug(f"Video file opened: {video_path}")
 
-    # Use a temporary file for the output video
-    output_video_path = os.path.join(os.getcwd(), "output_video.mp4")
+    # Define the output video path in the src directory
+    output_video_path = os.path.join("src", "output_video.mp4")
     logging.debug(f"Output video path: {output_video_path}")
 
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     out = cv2.VideoWriter(output_video_path, fourcc, 30.0, (frame_width, frame_height))
