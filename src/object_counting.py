@@ -64,12 +64,11 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     logging.debug(f"Video file opened: {video_path}")
 
     # Use a temporary file for the output video
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4', dir=run_dir) as tmpfile:
-        output_video_path = tmpfile.name
-    logging.debug(f"Temporary output video path: {output_video_path}")
+    output_video_path = os.path.join(os.getcwd(), "output_video.mp4")
+    logging.debug(f"Output video path: {output_video_path}")
 
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
+    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     out = cv2.VideoWriter(output_video_path, fourcc, 30.0, (frame_width, frame_height))
