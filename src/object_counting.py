@@ -28,7 +28,7 @@ def count(set_obj):
         final_obj_list.append(temp[0])
     return count_objects(final_obj_list)
 
-def process_video_and_count(video_path, model_path, classes_to_count, iou, conf, imgsz, run_dir, tracker, vid_stride, device='cpu'):
+def process_video_and_count(video_path, model_path, classes_to_count, iou, conf, imgsz, tracker, vid_stride, device='cpu'):
     """
     Process the video to count objects, draw bounding boxes around detected objects,
     and save an annotated video along with a JSON file containing the counts.
@@ -37,17 +37,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     logging.debug(f"Model path: {model_path}")
     logging.debug(f"Classes to count: {classes_to_count}")
     logging.debug(f"IOU: {iou}, Confidence: {conf}, Image size: {imgsz}")
-    logging.debug(f"Run directory: {run_dir}")
     logging.debug(f"Tracker: {tracker}, Video stride: {vid_stride}, Device: {device}")
-
-    # Ensure run directory exists
-    if not os.path.exists(run_dir):
-        try:
-            os.makedirs(run_dir)
-            logging.debug(f"Run directory created: {run_dir}")
-        except Exception as e:
-            logging.error(f"Failed to create run directory {run_dir}: {e}")
-            raise
 
     # Load the YOLO model
     try:
@@ -63,9 +53,10 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         raise FileNotFoundError(f"Cannot open video file {video_path}")
     logging.debug(f"Video file opened: {video_path}")
 
-    # Define the output video path in the src directory
-    output_video_path = os.path.join("src", "output_video.mp4")
-    logging.debug(f"Output video path: {output_video_path}")
+    # Use a temporary file for the output video
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmpfile:
+        output_video_path = tmpfile.name
+    logging.debug(f"Temporary output video path: {output_video_path}")
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'mp4v')
@@ -132,8 +123,12 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         most_common_class = max(classes, key=classes.get)
         Final_obj.add(most_common_class + '_' + str(track_id))
 
+    # Use a temporary file for the JSON output
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as tmpfile:
+        json_path = tmpfile.name
+    logging.debug(f"Temporary JSON path: {json_path}")
+
     # Save object counts to a JSON file
-    json_path = os.path.join(run_dir, "object_counts.json")
     try:
         with open(json_path, 'w') as f:
             json.dump(count(Final_obj), f, indent=4)
