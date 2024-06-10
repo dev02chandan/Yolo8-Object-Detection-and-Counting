@@ -7,7 +7,7 @@ import time
 import torch
 
 # App title
-st.image("videos/logo.png", use_column_width=False)
+st.image("logo.png", use_column_width=False)
 st.title('Object Detection and Counting')
 
 # Option to select input type

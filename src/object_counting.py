@@ -59,7 +59,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     logging.debug(f"Temporary output video path: {output_video_path}")
 
     # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+    fourcc = cv2.VideoWriter_fourcc(*'avc1')
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
     out = cv2.VideoWriter(output_video_path, fourcc, 30.0, (frame_width, frame_height))
