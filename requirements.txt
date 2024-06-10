@@ -1,5 +1,6 @@
 numpy
-opencv-python
+opencv-python-headless
 lapx>=0.5.2
 streamlit
 ultralytics
+torch
