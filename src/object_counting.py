@@ -2,6 +2,7 @@ import cv2
 import json
 import os
 import torch
+import tempfile
 import logging
 from collections import defaultdict
 from ultralytics import YOLO
@@ -53,9 +54,10 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         raise FileNotFoundError(f"Cannot open video file {video_path}")
     logging.debug(f"Video file opened: {video_path}")
 
-    # Determine output video path
-    output_video_path = os.path.join(run_dir, "output_video.mp4")
-    logging.debug(f"Output video path: {output_video_path}")
+    # Use a temporary file for the output video
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmpfile:
+        output_video_path = tmpfile.name
+    logging.debug(f"Temporary output video path: {output_video_path}")
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
@@ -130,7 +132,6 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     logging.debug(f"Object counts saved: {json_path}")
 
     return count(Final_obj), output_video_path
-
 
 def process_image_and_count(image_path, model_path, classes_to_count, run_dir, iou=0.6, conf=0.2, imgsz=640, augment=False, device='cpu'):
     """
