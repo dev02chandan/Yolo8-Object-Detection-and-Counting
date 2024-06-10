@@ -40,14 +40,7 @@ cuda_available = torch.cuda.is_available()
 device = 'cuda:0' if cuda_available else 'cpu'
 half = cuda_available
 
-# Toggle for additional parameters
-# with st.expander("Advanced Settings"):
-#     iou = st.slider("IoU Threshold", 0.0, 1.0, 0.6)
-#     conf = st.slider("Confidence Threshold", 0.0, 1.0, 0.6)
-#     imgsz = st.slider("Image Size", 320, 1280, 640)
-#     vid_stride = st.slider("Video Stride", 1, 10, 1)
-#     augment = st.checkbox("Enable Augmentation", False)
-
+# Hyperparameters
 iou = 0.6
 conf = 0.6
 imgsz = 1280
