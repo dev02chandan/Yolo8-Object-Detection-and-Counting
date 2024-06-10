@@ -41,12 +41,21 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     logging.debug(f"Tracker: {tracker}, Video stride: {vid_stride}, Device: {device}")
 
     # Ensure run directory exists
-    os.makedirs(run_dir, exist_ok=True)
-    logging.debug(f"Run directory created: {run_dir}")
+    if not os.path.exists(run_dir):
+        try:
+            os.makedirs(run_dir)
+            logging.debug(f"Run directory created: {run_dir}")
+        except Exception as e:
+            logging.error(f"Failed to create run directory {run_dir}: {e}")
+            raise
 
     # Load the YOLO model
-    model = YOLO(model_path).to(device)
-    logging.debug(f"Model loaded: {model_path} on device: {device}")
+    try:
+        model = YOLO(model_path).to(device)
+        logging.debug(f"Model loaded: {model_path} on device: {device}")
+    except Exception as e:
+        logging.error(f"Failed to load model {model_path}: {e}")
+        raise
 
     # Open the video file
     cap = cv2.VideoCapture(video_path)
@@ -55,7 +64,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
     logging.debug(f"Video file opened: {video_path}")
 
     # Use a temporary file for the output video
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmpfile:
+    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4', dir=run_dir) as tmpfile:
         output_video_path = tmpfile.name
     logging.debug(f"Temporary output video path: {output_video_path}")
 
@@ -126,10 +135,13 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
 
     # Save object counts to a JSON file
     json_path = os.path.join(run_dir, "object_counts.json")
-    with open(json_path, 'w') as f:
-        json.dump(count(Final_obj), f, indent=4)
-
-    logging.debug(f"Object counts saved: {json_path}")
+    try:
+        with open(json_path, 'w') as f:
+            json.dump(count(Final_obj), f, indent=4)
+        logging.debug(f"Object counts saved: {json_path}")
+    except Exception as e:
+        logging.error(f"Failed to save object counts to {json_path}: {e}")
+        raise
 
     return count(Final_obj), output_video_path
 
