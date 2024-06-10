@@ -4,3 +4,4 @@ lapx>=0.5.2
 streamlit
 ultralytics
 torch
+dill
