@@ -54,12 +54,15 @@ if uploaded_file is not None and len(selected_classes) > 0 and selected_model:
         tfile.write(uploaded_file.getvalue())
         file_path = tfile.name
 
+        run_dir = "runs/temp"
+        os.makedirs(run_dir, exist_ok=True)
+
         # Process file based on type
         if file_type == "video":
-            object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, iou, conf, imgsz, tracker="botsort.yaml", vid_stride=vid_stride, device=device)
+            object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, run_dir, iou, conf, imgsz, tracker="botsort.yaml", vid_stride=vid_stride, device=device)
             st.video(output_path)
         elif file_type == "image":
-            object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, iou=iou, conf=conf, imgsz=imgsz, augment=augment, device=device)
+            object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, run_dir, iou=iou, conf=conf, imgsz=imgsz, augment=augment, device=device)
             st.image(output_path)
 
         # Display object counts

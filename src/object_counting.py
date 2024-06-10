@@ -1,14 +1,9 @@
 import cv2
 import json
 import os
-import torch
-import tempfile
-import logging
 from collections import defaultdict
 from ultralytics import YOLO
 
-# Set up logging
-logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 
 classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
 
@@ -28,44 +23,34 @@ def count(set_obj):
         final_obj_list.append(temp[0])
     return count_objects(final_obj_list)
 
-def process_video_and_count(video_path, model_path, classes_to_count, iou, conf, imgsz, tracker, vid_stride, device='cpu'):
+def process_video_and_count(video_path, model_path, classes_to_count, run_dir, iou, conf, imgsz, tracker, vid_stride, device='cpu'):
     """
     Process the video to count objects, draw bounding boxes around detected objects,
     and save an annotated video along with a JSON file containing the counts.
     """
-    logging.debug(f"Processing video: {video_path}")
-    logging.debug(f"Model path: {model_path}")
-    logging.debug(f"Classes to count: {classes_to_count}")
-    logging.debug(f"IOU: {iou}, Confidence: {conf}, Image size: {imgsz}")
-    logging.debug(f"Tracker: {tracker}, Video stride: {vid_stride}, Device: {device}")
 
-    # Load the YOLO model
-    try:
-        model = YOLO(model_path).to(device)
-        logging.debug(f"Model loaded: {model_path} on device: {device}")
-    except Exception as e:
-        logging.error(f"Failed to load model {model_path}: {e}")
-        raise
+    model = YOLO(model_path).to(device)
 
-    # Open the video file
     cap = cv2.VideoCapture(video_path)
-    if not cap.isOpened():
-        raise FileNotFoundError(f"Cannot open video file {video_path}")
-    logging.debug(f"Video file opened: {video_path}")
 
-    # Use a temporary file for the output video
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmpfile:
-        output_video_path = tmpfile.name
-    logging.debug(f"Temporary output video path: {output_video_path}")
+    output_video_path = os.path.join(run_dir, "output_video.mp4")
 
     # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'avc1')
+
     frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
     frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-    out = cv2.VideoWriter(output_video_path, fourcc, 30.0, (frame_width, frame_height))
-    if not out.isOpened():
-        raise IOError(f"Cannot open video writer with path {output_video_path}")
-    logging.debug(f"VideoWriter opened: {output_video_path}")
+
+    out = cv2.VideoWriter(
+        output_video_path, 
+        fourcc, 
+        30.0, 
+        (frame_width, frame_height)
+        )
+    
+    # if not out.isOpened():
+    #     raise IOError(f"Cannot open video writer with path {output_video_path}")
+    # logging.debug(f"VideoWriter opened: {output_video_path}")
 
     object_counts = defaultdict(int)
     Final_obj = set()
@@ -77,7 +62,6 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         if not success:
             break
 
-        logging.debug(f"Processing frame {frame_counter}")
         results = model.track(frame,
                               classes=classes_to_count,
                               persist=True,
@@ -110,7 +94,6 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
             annotated_frames.append(annotated_frame)
 
         if annotated_frames:
-            logging.debug(f"Writing frame {frame_counter}")
             out.write(annotated_frames[0])  # Ensure only one frame is written per loop iteration
 
         frame_counter += 1
@@ -124,18 +107,13 @@ def process_video_and_count(video_path, model_path, classes_to_count, iou, conf,
         Final_obj.add(most_common_class + '_' + str(track_id))
 
     # Use a temporary file for the JSON output
-    with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as tmpfile:
-        json_path = tmpfile.name
-    logging.debug(f"Temporary JSON path: {json_path}")
+    # with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as tmpfile:
+    #     json_path = tmpfile.name
+    # logging.debug(f"Temporary JSON path: {json_path}")
+    json_path = os.path.join(run_dir, "object_counts.json")
 
-    # Save object counts to a JSON file
-    try:
-        with open(json_path, 'w') as f:
-            json.dump(count(Final_obj), f, indent=4)
-        logging.debug(f"Object counts saved: {json_path}")
-    except Exception as e:
-        logging.error(f"Failed to save object counts to {json_path}: {e}")
-        raise
+    with open(json_path, 'w') as f:
+        json.dump(count(Final_obj), f, indent=4)
 
     return count(Final_obj), output_video_path
 
