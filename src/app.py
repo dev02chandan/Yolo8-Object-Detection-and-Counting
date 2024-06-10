@@ -40,7 +40,7 @@ cuda_available = torch.cuda.is_available()
 device = 'cuda:0' if cuda_available else 'cpu'
 half = cuda_available
 
-# Hyperparameters
+# Set default values for parameters
 iou = 0.6
 conf = 0.6
 imgsz = 1280
@@ -56,7 +56,7 @@ if uploaded_file is not None and len(selected_classes) > 0 and selected_model:
 
         # Process file based on type
         timestamp = time.strftime("%Y%m%d-%H%M%S")
-        run_dir = f"runs/{selected_model.split('.')[0]}_{timestamp}"
+        run_dir = f"src/{selected_model.split('.')[0]}_{timestamp}"
         os.makedirs(run_dir, exist_ok=True)
 
         if file_type == "video":
