@@ -40,7 +40,7 @@ cuda_available = torch.cuda.is_available()
 device = 'cuda:0' if cuda_available else 'cpu'
 half = cuda_available
 
-# Set default values for parameters
+# Set default values for parameters#
 iou = 0.6
 conf = 0.6
 imgsz = 1280
@@ -59,9 +59,9 @@ if uploaded_file is not None and len(selected_classes) > 0 and selected_model:
 
         # Process file based on type
         if file_type == "video":
-            object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, run_dir, iou, conf, imgsz, tracker="botsort.yaml", vid_stride=vid_stride, device=device)
-            st.video(output_path)
-        elif file_type == "image":
+            object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, run_dir, iou, conf, imgsz, tracker="botsort.yaml", vid_stride=vid_stride, device=device, chunk_size=10)
+            # st.video(output_path)``
+        elif file_type == "image": 
             object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, run_dir, iou=iou, conf=conf, imgsz=imgsz, augment=augment, device=device)
             st.image(output_path)
 
