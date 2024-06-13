@@ -5,4 +5,5 @@ streamlit
 ultralytics
 torch
 ffmpeg
+ffmpeg-python
 dill
