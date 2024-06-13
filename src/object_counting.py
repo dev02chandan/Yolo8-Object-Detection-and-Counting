@@ -2,6 +2,7 @@ import cv2
 import json
 import os
 import tempfile
+import shutil
 from collections import defaultdict
 from ultralytics import YOLO
 import streamlit as st
@@ -73,6 +74,10 @@ def process_video_and_count(video_path, model_path, classes_to_count, run_dir, i
     # Create a container to manage displayed content
     video_container = st.empty()
 
+    # Create a directory for temporary files
+    temp_dir = os.path.join(run_dir, "tempdel")
+    os.makedirs(temp_dir, exist_ok=True)
+
     while cap.isOpened():
         frames = []
         for _ in range(chunk_size):
@@ -83,7 +88,7 @@ def process_video_and_count(video_path, model_path, classes_to_count, run_dir, i
         if not frames:
             break
 
-        with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as temp_video_file:
+        with tempfile.NamedTemporaryFile(dir=temp_dir, delete=False, suffix='.mp4') as temp_video_file:
             temp_video_path = temp_video_file.name
             temp_video_paths.append(temp_video_path)
             temp_out = cv2.VideoWriter(temp_video_path, fourcc, 30.0, (frame_width, frame_height))
@@ -137,6 +142,9 @@ def process_video_and_count(video_path, model_path, classes_to_count, run_dir, i
 
     # Complete progress bar
     progress_bar.progress(1.0)
+
+    # Clean up temporary files
+    shutil.rmtree(temp_dir)
 
     return count(Final_obj), output_video_path
 
