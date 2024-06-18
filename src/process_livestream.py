@@ -1,73 +1,45 @@
-import cv2
-from collections import defaultdict
+from streamlit_webrtc import VideoProcessorBase, webrtc_streamer, WebRtcMode
+import av
+import torch
 from ultralytics import YOLO
-import streamlit as st
+from collections import defaultdict
 
 classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
 
-def initialize_session_state():
-    if 'tracked_objects' not in st.session_state:
-        st.session_state['tracked_objects'] = defaultdict(lambda: defaultdict(int))
-    if 'stop_button' not in st.session_state:
-        st.session_state['stop_button'] = False
+class VideoProcessor(VideoProcessorBase):
+    def __init__(self, model_path, classes_to_count, iou, conf, imgsz, tracker, device):
+        self.model = YOLO(model_path).to(device)
+        self.classes_to_count = classes_to_count
+        self.iou = iou
+        self.conf = conf
+        self.imgsz = imgsz
+        self.tracker = tracker
+        self.device = device
+        self.tracked_objects = defaultdict(lambda: defaultdict(int))
 
-def reset_session_state():
-    st.session_state['tracked_objects'] = defaultdict(lambda: defaultdict(int))
-    st.session_state['stop_button'] = False
-
-def process_livestream_and_count(model_path, classes_to_count, iou=0.6, conf=0.6, imgsz=1280, tracker="botsort.yaml", device='cpu'):
-    initialize_session_state()
-    model = YOLO(model_path).to(device)
-
-    cap = cv2.VideoCapture(0)
-    if not cap.isOpened():
-        st.error("Failed to open webcam.")
-        return
-
-    stframe = st.empty()
-
-    def stop_button_callback():
-        st.session_state['stop_button'] = True
-
-    st.button('Stop Live Stream', on_click=stop_button_callback, key='unique_stop_button')
-
-    while not st.session_state['stop_button']:
-        ret, frame = cap.read()
-        if not ret:
-            break
-
-        results = model.track(frame, classes=classes_to_count, persist=True, tracker=tracker, conf=conf, iou=iou, imgsz=imgsz, device=device, half=(device != 'cpu'), stream_buffer=False)
+    def recv(self, frame):
+        img = frame.to_ndarray(format="bgr24")
+        results = self.model.track(img, classes=self.classes_to_count, persist=True, tracker=self.tracker, conf=self.conf, iou=self.iou, imgsz=self.imgsz, device=self.device, half=(self.device != 'cpu'))
 
         for r in results:
-            annotated_frame = r.plot()
-            stframe.image(annotated_frame, channels="BGR")
-
             for box in r.boxes:
-                if box.id is not None and int(box.cls[0]) in classes_to_count:
+                if box.id is not None and box.cls[0] in self.classes_to_count:
                     track_id = box.id.int().tolist()[0]
                     class_id = int(box.cls[0])
                     class_name = classNames[class_id]
 
-                    # Log detected class and track ID
-                    print(f"Detected: {class_name} with ID: {track_id}")
+                    # Count objects with respect to their track ID
+                    self.tracked_objects[track_id][class_name] += 1
 
-                    # Update the session state's tracked_objects dictionary
-                    st.session_state['tracked_objects'][track_id][class_name] += 1
+        annotated_frame = results[0].plot()
+        return av.VideoFrame.from_ndarray(annotated_frame, format="bgr24")
 
-                    # Additional logging to debug
-                    print(f"Tracked objects (updated): {dict(st.session_state['tracked_objects'])}")
+def process_livestream_and_count(model_path, classes_to_count, iou, conf, imgsz, tracker, device):
+    ctx = webrtc_streamer(
+        key="example",
+        mode=WebRtcMode.SENDRECV,
+        video_processor_factory=lambda: VideoProcessor(model_path, classes_to_count, iou, conf, imgsz, tracker, device),
+        media_stream_constraints={"video": True, "audio": False},
+    )
 
-    cap.release()
-
-    # Determine the most frequently detected class for each track_id
-    final_counts = defaultdict(int)
-    for track_id, classes in st.session_state['tracked_objects'].items():
-        most_common_class = max(classes, key=classes.get)
-        final_counts[most_common_class] += 1
-
-    # Log final counts for debugging
-    print(f"Final object counts: {dict(final_counts)}")
-
-    st.write(f"Object counts: {dict(final_counts)}")
-
-    return dict(final_counts)
+    return ctx.video_processor.tracked_objects if ctx.video_processor else {}
