@@ -1,16 +1,22 @@
 import cv2
-import time
 from collections import defaultdict
 from ultralytics import YOLO
 import streamlit as st
-from tempfile import NamedTemporaryFile
-import os
-import json
-from process_video import count, count_objects
 
 classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
 
-def process_livestream_and_count(model_path, classes_to_count, run_dir, iou=0.6, conf=0.6, imgsz=1280, tracker="botsort.yaml", device='cpu'):
+def initialize_session_state():
+    if 'tracked_objects' not in st.session_state:
+        st.session_state['tracked_objects'] = defaultdict(lambda: defaultdict(int))
+    if 'stop_button' not in st.session_state:
+        st.session_state['stop_button'] = False
+
+def reset_session_state():
+    st.session_state['tracked_objects'] = defaultdict(lambda: defaultdict(int))
+    st.session_state['stop_button'] = False
+
+def process_livestream_and_count(model_path, classes_to_count, iou=0.6, conf=0.6, imgsz=1280, tracker="botsort.yaml", device='cpu'):
+    initialize_session_state()
     model = YOLO(model_path).to(device)
 
     cap = cv2.VideoCapture(0)
@@ -18,23 +24,7 @@ def process_livestream_and_count(model_path, classes_to_count, run_dir, iou=0.6,
         st.error("Failed to open webcam.")
         return
 
-    output_video_path = os.path.join(run_dir, "livestream_output.mp4")
-
-    # Define the codec and create VideoWriter object
-    fourcc = cv2.VideoWriter_fourcc(*'avc1')
-    frame_width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-    frame_height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-
-    with NamedTemporaryFile(delete=False, suffix='.mp4', dir=run_dir) as temp_video_file:
-        output_video_path = temp_video_file.name
-
-    out = cv2.VideoWriter(output_video_path, fourcc, 30.0, (frame_width, frame_height))
-
-    tracked_objects = defaultdict(lambda: defaultdict(int))
-
     stframe = st.empty()
-    if 'stop_button' not in st.session_state:
-        st.session_state['stop_button'] = False
 
     def stop_button_callback():
         st.session_state['stop_button'] = True
@@ -59,36 +49,25 @@ def process_livestream_and_count(model_path, classes_to_count, run_dir, iou=0.6,
                     class_name = classNames[class_id]
 
                     # Log detected class and track ID
-                    st.write(f"Detected: {class_name} with ID: {track_id}")
+                    print(f"Detected: {class_name} with ID: {track_id}")
 
-                    # Ensure the tracked_objects dictionary is updated
-                    if class_name not in tracked_objects[track_id]:
-                        tracked_objects[track_id][class_name] = 0
-                    tracked_objects[track_id][class_name] += 1
+                    # Update the session state's tracked_objects dictionary
+                    st.session_state['tracked_objects'][track_id][class_name] += 1
 
                     # Additional logging to debug
-                    st.write(f"Tracked objects (updated): {tracked_objects}")
-
-        out.write(annotated_frame)
+                    print(f"Tracked objects (updated): {dict(st.session_state['tracked_objects'])}")
 
     cap.release()
-    out.release()
 
-    # Determine most frequent class per track
-    Final_obj = set()
-    for track_id, classes in tracked_objects.items():
+    # Determine the most frequently detected class for each track_id
+    final_counts = defaultdict(int)
+    for track_id, classes in st.session_state['tracked_objects'].items():
         most_common_class = max(classes, key=classes.get)
-        Final_obj.add(most_common_class + '_' + str(track_id))
-
-    json_path = os.path.join(run_dir, "object_counts.json")
-    with open(json_path, 'w') as f:
-        final_counts = count(Final_obj)
-        json.dump(final_counts, f, indent=4)
+        final_counts[most_common_class] += 1
 
     # Log final counts for debugging
-    st.write(f"Tracked objects: {tracked_objects}")
-    st.write(f"Final object counts: {final_counts}")
+    print(f"Final object counts: {dict(final_counts)}")
 
-    st.write(f"Object counts: {final_counts}")
+    st.write(f"Object counts: {dict(final_counts)}")
 
-    return final_counts, output_video_path
+    return dict(final_counts)

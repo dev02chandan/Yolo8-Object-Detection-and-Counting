@@ -68,12 +68,12 @@ if (uploaded_file is not None and len(selected_classes) > 0 and selected_model) 
         # Process file based on type
         if file_type == "video":
             object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, run_dir, iou, conf, imgsz, tracker="botsort.yaml", vid_stride=vid_stride, device=device)
-            st.video(output_path)
+            # st.video(output_path)
         elif file_type == "image":
             object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, run_dir, iou=iou, conf=conf, imgsz=imgsz, augment=augment, device=device)
-            st.image(output_path)
+            # st.image(output_path)
         elif file_type == "livestream":
-            object_counts, output_path = process_livestream_and_count(selected_model, class_ids, run_dir, iou=iou, conf=conf, imgsz=imgsz, tracker="botsort.yaml", device=device)
+            object_counts = process_livestream_and_count(selected_model, class_ids, iou=iou, conf=conf, imgsz=imgsz, tracker="botsort.yaml", device=device)
 
         # Display object counts
         st.write(f"Object counts: {object_counts}")
