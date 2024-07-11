@@ -80,12 +80,8 @@ def process_video_and_count(video_path, model_path, classes_to_count, run_dir):
         # Write the frame with annotations to the output video
         out.write(annotated_frame)
 
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            break
-
     cap.release()
     out.release()
-    cv2.destroyAllWindows()
 
     # Save object counts to a JSON file
     json_path = os.path.join(run_dir, "object_counts.json")
