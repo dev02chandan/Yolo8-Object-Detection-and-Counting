@@ -15,7 +15,7 @@ st.image("logo.png", use_column_width=False)
 st.title('Object Detection and Counting')
 
 # Option to select input type
-input_type = st.radio("Select the input type:", ("Video", "Image", "Live Stream"))
+input_type = st.radio("Select the input type:", ("Video", "Image", "Webcam"))
 
 # File uploader based on input type
 uploaded_file = None

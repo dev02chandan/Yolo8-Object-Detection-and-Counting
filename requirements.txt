@@ -8,3 +8,4 @@ ffmpeg
 ffmpeg-python
 dill
 streamlit-webrtc
+aioice
