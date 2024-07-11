@@ -1,6 +1,8 @@
 {
-    "knife": 4,
-    "spoon": 7,
-    "fork": 3,
-    "cup": 1
+    "keyboard": 4,
+    "mouse": 5,
+    "cell phone": 3,
+    "bottle": 4,
+    "laptop": 1,
+    "chair": 3
 }
