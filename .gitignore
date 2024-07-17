@@ -1,2 +1,3 @@
 venv/
 deletethis.py
+src/__pycache__/
