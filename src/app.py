@@ -25,7 +25,7 @@ if input_type == "Video":
 elif input_type == "Image":
     uploaded_file = st.file_uploader("Upload an image...", type=["jpg", "png"])
     file_type = "image"
-elif input_type == "Live Stream":
+elif input_type == "Webcam":
     file_type = "livestream"
 
 classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
@@ -75,9 +75,14 @@ if (uploaded_file is not None and len(selected_classes) > 0 and selected_model) 
         if file_type == "video":
             object_counts, output_path = process_video_and_count(file_path, selected_model, class_ids, run_dir, iou, conf, imgsz, tracker="botsort.yaml", vid_stride=vid_stride, device=device)
             st.session_state["tracked_objects"] = object_counts
+            st.write(f"Object counts: {dict(object_counts)}")
+
         elif file_type == "image":
             object_counts, output_path = process_image_and_count(file_path, selected_model, class_ids, run_dir, iou=iou, conf=conf, imgsz=imgsz, augment=augment, device=device)
             st.session_state["tracked_objects"] = object_counts
+            st.image(output_path)
+            st.write(f"Object counts: {dict(object_counts)}")
+
         elif file_type == "livestream":
             ctx = webrtc_streamer(
                 key="example",
@@ -89,10 +94,10 @@ if (uploaded_file is not None and len(selected_classes) > 0 and selected_model) 
             if ctx.video_processor:
                 st.session_state["tracked_objects"] = ctx.video_processor.tracked_objects
 
-        # Aggregate counts based on the most common class per track ID
-        final_counts = defaultdict(int)
-        for track_id, classes in st.session_state['tracked_objects'].items():
-            most_common_class = max(classes, key=classes.get)
-            final_counts[most_common_class] += 1
+            # Aggregate counts based on the most common class per track ID
+            final_counts = defaultdict(int)
+            for track_id, classes in st.session_state['tracked_objects'].items():
+                most_common_class = max(classes, key=classes.get)
+                final_counts[most_common_class] += 1
 
-        st.write(f"Object counts: {dict(final_counts)}")
+            st.write(f"Object counts: {dict(final_counts)}")
