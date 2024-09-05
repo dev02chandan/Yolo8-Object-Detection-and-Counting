@@ -5,6 +5,7 @@ import os
 import torch
 
 # App title
+st.image("logo.png", use_column_width=False)
 st.title('Object Counting in Multiple Images')
 
 # Instructions
