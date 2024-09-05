@@ -7,7 +7,7 @@ from collections import defaultdict
 from ultralytics import YOLO
 import streamlit as st
 
-classNames = ['cup', 'cutter', 'fork', 'knife', 'painting', 'pan', 'plant', 'plate', 'scissor', 'spoon']
+classNames = ['Fire', 'default', 'smoke']
 
 def count_objects(list1):
     count = {}
