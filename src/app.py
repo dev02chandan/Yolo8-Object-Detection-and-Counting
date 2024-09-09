@@ -28,17 +28,18 @@ else:
 
 classNames = ['Fire', 'default', 'smoke']
 
-# Selection of objects to detect
-selected_classes = st.multiselect(
-    'Select object classes to count',
-    options=classNames,
-    default=['Fire', 'default', 'smoke']
-)
+# # Selection of objects to detect
+# selected_classes = st.multiselect(
+#     'Select object classes to count',
+#     options=classNames,
+#     default=['Fire', 'default', 'smoke']
+# )
+selected_classes = ['Fire']
 
 # Convert class names to class IDs
 class_ids = [classNames.index(cls) for cls in selected_classes if cls in classNames]
 
-selected_model = 'firensmoke.pt'
+selected_model = 'Fire and Smoke Model - 20 epochs - 6k dataset.pt'
 
 # Check if CUDA is available
 cuda_available = torch.cuda.is_available()
@@ -48,9 +49,9 @@ half = cuda_available
 # Set default values for parameters
 iou = 0.6
 conf = 0.25
-imgsz = 800
+imgsz = 600
 vid_stride = 2
-augment = True
+augment = False
 
 # Initialize tracked objects
 if "tracked_objects" not in st.session_state:
